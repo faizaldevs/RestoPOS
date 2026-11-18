@@ -49,6 +49,10 @@ class UserController extends BaseController
      */
     public function store(UserRequest $request)
     {
+        if (!Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
+
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
@@ -76,6 +80,10 @@ class UserController extends BaseController
      */
     public function update(UserRequest $request, $id)
     {
+        if (!Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
+
         $user = User::findOrFail($id);
 
         if (!empty($request->password)) {
